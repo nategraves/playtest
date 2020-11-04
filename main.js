@@ -70,10 +70,6 @@ Apify.main(async () => {
   } catch (e) {
     console.error(e);
   } finally {
-    await Apify.setValue(
-      'OUTPUT',
-      JSON.stringify(output),
-      { contentType: 'application/json' }
-    )
+    await Apify.setValue('OUTPUT', output)
   }
 });
