@@ -9,6 +9,8 @@ Apify.main(async () => {
   console.log("Input:");
   console.dir(input);
 
+  const output = { isLoginSuccess: false, isCancelSuccess: false };
+
   try {
     const browser = await chromium.launch({
       headless: false,
@@ -50,6 +52,8 @@ Apify.main(async () => {
       page.press('input[type="password"]', "Enter"),
     ]);
 
+    output.isLoginSuccess = true;
+
     // Click text="Brenna"
     await page.click('text="Brenna"');
 
@@ -61,7 +65,15 @@ Apify.main(async () => {
       page.waitForEvent("popup"),
       page.click('text="Manage Your Subscription"'),
     ]);
+
+    output.isCancelSuccess = true;
   } catch (e) {
     console.error(e);
+  } finally {
+    await Apify.setValue(
+      'OUTPUT',
+      JSON.stringify(output),
+      { contentType: 'application/json' }
+    )
   }
 });
